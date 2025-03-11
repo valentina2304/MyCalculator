@@ -5,6 +5,7 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Input;
 
 namespace Tema1Calculator
@@ -12,7 +13,7 @@ namespace Tema1Calculator
     public class CalculatorViewModel : INotifyPropertyChanged
     {
         private readonly CalculatorEngine _calculatorEngine;
-        private string _displayText;
+        private double _displayText;
         private string _operationHistory;
 
         public event PropertyChangedEventHandler PropertyChanged;
@@ -20,11 +21,11 @@ namespace Tema1Calculator
         public CalculatorViewModel()
         {
             _calculatorEngine = new CalculatorEngine();
-            _displayText = "0";
+            _displayText =0;
             _operationHistory = "";
         }
 
-        public string DisplayText
+        public double DisplayText
         {
             get => _displayText;
             private set
@@ -94,11 +95,11 @@ namespace Tema1Calculator
             }
             catch (OverflowException)
             {
-                DisplayText = "Overflow";
+                MessageBox.Show("Overflow", "Error", MessageBoxButton.OK, MessageBoxImage.Warning);
             }
             catch (ArgumentException)
             {
-                DisplayText = "Invalid Input";
+                MessageBox.Show("Invalid Input", "Error", MessageBoxButton.OK, MessageBoxImage.Warning);
             }
         }
 
@@ -111,7 +112,7 @@ namespace Tema1Calculator
             }
             catch (ArgumentException)
             {
-                DisplayText = "Invalid Operation";
+                MessageBox.Show("Invalid Operation", "Error", MessageBoxButton.OK, MessageBoxImage.Warning);
             }
         }
 
@@ -124,17 +125,17 @@ namespace Tema1Calculator
             }
             catch (DivideByZeroException)
             {
-                DisplayText = "Divide by Zero";
+                MessageBox.Show("Divide by Zero", "Error", MessageBoxButton.OK, MessageBoxImage.Warning);
             }
             catch (Exception)
             {
-                DisplayText = "Error";
+                MessageBox.Show("Error", "Error", MessageBoxButton.OK, MessageBoxImage.Warning);    
             }
         }
 
         private void UpdateDisplay(double value)
         {
-            DisplayText = FormatNumber(value);
+            DisplayText =value;
         }
 
         private bool _digitGroupingEnabled = false;
@@ -153,7 +154,7 @@ namespace Tema1Calculator
 
         private void UpdateDisplayWithHistory(double value, string operation)
         {
-            DisplayText = FormatNumber(value);
+            DisplayText = value;
 
             if (operation == "=")
             {
@@ -182,7 +183,7 @@ namespace Tema1Calculator
         public void Clear()
         {
             _calculatorEngine.Reset();
-            DisplayText = "0";
+            DisplayText = 0;
             OperationHistory = "";
         }
 
@@ -196,7 +197,7 @@ namespace Tema1Calculator
             }
             catch (Exception)
             {
-                DisplayText = "Error";
+               MessageBox.Show("Error", "Error", MessageBoxButton.OK, MessageBoxImage.Warning);
             }
         }
 
@@ -214,7 +215,7 @@ namespace Tema1Calculator
             }
             catch (Exception)
             {
-                DisplayText = "Error";
+                MessageBox.Show("Error", "Error", MessageBoxButton.OK, MessageBoxImage.Warning);
             }
         }
 
@@ -226,7 +227,7 @@ namespace Tema1Calculator
             }
             catch (DivideByZeroException)
             {
-                DisplayText = "Divide by Zero";
+                MessageBox.Show("Divide by Zero", "Error", MessageBoxButton.OK, MessageBoxImage.Warning);
             }
         }
 
@@ -238,7 +239,7 @@ namespace Tema1Calculator
             }
             catch (Exception)
             {
-                DisplayText = "Error";
+                MessageBox.Show("Error", "Error", MessageBoxButton.OK, MessageBoxImage.Warning);
             }
         }
 
@@ -250,7 +251,7 @@ namespace Tema1Calculator
             }
             catch (ArithmeticException)
             {
-                DisplayText = "Invalid Input";
+                MessageBox.Show("Invalid Input", "Error", MessageBoxButton.OK, MessageBoxImage.Warning);
             }
         }
 
@@ -262,18 +263,31 @@ namespace Tema1Calculator
             }
             catch (Exception)
             {
-                DisplayText = "Error";
+                MessageBox.Show("Error", "Error", MessageBoxButton.OK, MessageBoxImage.Warning);
             }
         }
 
         // Funcții de memorie
-        public void MemoryClear() => _calculatorEngine.MemoryClear();
+
+        public List<double> GetMemoryList()
+        {
+            return _calculatorEngine.GetMemoryList();
+        }
+
+        public void UseValueFromMemory(double value)
+        {
+            _calculatorEngine.UseValueFromMemory(value);
+            UpdateDisplay(_calculatorEngine.CurrentValue);
+        }
+
+        public void MemoryClear() => _calculatorEngine.ClearMemoryList();
         public void MemoryStore() => _calculatorEngine.MemoryStore();
         public void MemoryRecall()
         {
-            _calculatorEngine.MemoryRecall();
-            UpdateDisplay(_calculatorEngine.CurrentValue);
+            double memoryValue = _calculatorEngine.RecallMemory();
+            UpdateDisplay(memoryValue);
         }
+
         public void MemoryAdd() => _calculatorEngine.MemoryAdd();
         public void MemorySubtract() => _calculatorEngine.MemorySubtract();
 

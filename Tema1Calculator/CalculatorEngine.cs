@@ -231,15 +231,70 @@ namespace Tema1Calculator
         }
 
         // Funcții de memorie
-        public void MemoryClear() => _memory = 0;
-        public void MemoryStore() => _memory = _currentValue;
-        public void MemoryRecall()
+        private List<double> _memoryList = new List<double>();
+
+        public void MemoryStore()
         {
-            _currentValue = _memory;
+            _memory = _currentValue;
+            _memoryList.Add(_memory);
+        }
+
+        public List<double> GetMemoryList()
+        {
+            return new List<double>(_memoryList);
+        }
+
+        public void ClearMemoryList()
+        {
+            _memoryList.Clear();
+            _memory = 0;
+        }
+
+        public double RecallMemory()
+        {
+            return _memory; 
+        }
+
+        public void UseValueFromMemory(double value)
+        {
+            _currentValue = value;
             _isNewNumber = true;
         }
-        public void MemoryAdd() => _memory += _currentValue;
-        public void MemorySubtract() => _memory -= _currentValue;
 
+        public void MemoryAdd()
+        {
+            if (_memoryList.Count > 0)
+            {
+                int lastIndex = _memoryList.Count - 1;
+                double lastValue = _memoryList[lastIndex];
+
+                _memoryList[lastIndex] = lastValue + _currentValue;
+
+                _memory = _memoryList[lastIndex];
+            }
+            else
+            {
+                _memory = _currentValue;
+                _memoryList.Add(_memory);
+            }
+        }
+
+        public void MemorySubtract()
+        {
+            if (_memoryList.Count > 0)
+            {
+                int lastIndex = _memoryList.Count - 1;
+                double lastValue = _memoryList[lastIndex];
+
+                _memoryList[lastIndex] = lastValue - _currentValue;
+
+                _memory = _memoryList[lastIndex];
+            }
+            else
+            {
+                _memory = -_currentValue;
+                _memoryList.Add(_memory);
+            }
+        }
     }
 }

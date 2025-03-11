@@ -1,26 +1,22 @@
 {
   "Version": 1,
-  "WorkspaceRootPath": "C:\\Users\\40720\\OneDrive\\Desktop\\FACULTATE\\AN II\\SEM II\\Medii Vizuale de Programare\\Tema1Calculator\\",
+  "WorkspaceRootPath": "C:\\Users\\40720\\OneDrive\\Desktop\\FACULTATE\\AN II\\SEM II\\Medii Vizuale de Programare\\MyComputer\\Tema1Calculator\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{87B62ACF-0F21-407E-83D4-3CB2F3AEADD0}|Tema1Calculator.csproj|c:\\users\\40720\\onedrive\\desktop\\facultate\\an ii\\sem ii\\medii vizuale de programare\\tema1calculator\\calculatorengine.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{87B62ACF-0F21-407E-83D4-3CB2F3AEADD0}|Tema1Calculator.csproj|solutionrelative:calculatorengine.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{87B62ACF-0F21-407E-83D4-3CB2F3AEADD0}|Tema1Calculator.csproj|c:\\users\\40720\\onedrive\\desktop\\facultate\\an ii\\sem ii\\medii vizuale de programare\\tema1calculator\\calculatorviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{87B62ACF-0F21-407E-83D4-3CB2F3AEADD0}|Tema1Calculator.csproj|solutionrelative:calculatorviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{87B62ACF-0F21-407E-83D4-3CB2F3AEADD0}|Tema1Calculator.csproj|c:\\users\\40720\\onedrive\\desktop\\facultate\\an ii\\sem ii\\medii vizuale de programare\\tema1calculator\\mainwindow.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{87B62ACF-0F21-407E-83D4-3CB2F3AEADD0}|Tema1Calculator.csproj|c:\\users\\40720\\onedrive\\desktop\\facultate\\an ii\\sem ii\\medii vizuale de programare\\mycomputer\\tema1calculator\\mainwindow.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{87B62ACF-0F21-407E-83D4-3CB2F3AEADD0}|Tema1Calculator.csproj|solutionrelative:mainwindow.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{87B62ACF-0F21-407E-83D4-3CB2F3AEADD0}|Tema1Calculator.csproj|c:\\users\\40720\\onedrive\\desktop\\facultate\\an ii\\sem ii\\medii vizuale de programare\\tema1calculator\\mainwindow.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
-      "RelativeMoniker": "D:0:0:{87B62ACF-0F21-407E-83D4-3CB2F3AEADD0}|Tema1Calculator.csproj|solutionrelative:mainwindow.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
+      "AbsoluteMoniker": "D:0:0:{87B62ACF-0F21-407E-83D4-3CB2F3AEADD0}|Tema1Calculator.csproj|c:\\users\\40720\\onedrive\\desktop\\facultate\\an ii\\sem ii\\medii vizuale de programare\\mycomputer\\tema1calculator\\calculatorviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{87B62ACF-0F21-407E-83D4-3CB2F3AEADD0}|Tema1Calculator.csproj|solutionrelative:calculatorviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{87B62ACF-0F21-407E-83D4-3CB2F3AEADD0}|Tema1Calculator.csproj|c:\\users\\40720\\onedrive\\desktop\\facultate\\an ii\\sem ii\\medii vizuale de programare\\tema1calculator\\assemblyinfo.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{87B62ACF-0F21-407E-83D4-3CB2F3AEADD0}|Tema1Calculator.csproj|solutionrelative:assemblyinfo.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{87B62ACF-0F21-407E-83D4-3CB2F3AEADD0}|Tema1Calculator.csproj|c:\\users\\40720\\onedrive\\desktop\\facultate\\an ii\\sem ii\\medii vizuale de programare\\mycomputer\\tema1calculator\\calculatorengine.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{87B62ACF-0F21-407E-83D4-3CB2F3AEADD0}|Tema1Calculator.csproj|solutionrelative:calculatorengine.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{87B62ACF-0F21-407E-83D4-3CB2F3AEADD0}|Tema1Calculator.csproj|c:\\users\\40720\\onedrive\\desktop\\facultate\\an ii\\sem ii\\medii vizuale de programare\\mycomputer\\tema1calculator\\mainwindow.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
+      "RelativeMoniker": "D:0:0:{87B62ACF-0F21-407E-83D4-3CB2F3AEADD0}|Tema1Calculator.csproj|solutionrelative:mainwindow.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
     }
   ],
   "DocumentGroupContainers": [
@@ -30,17 +26,17 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 0,
+          "SelectedChildIndex": 2,
           "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 2,
               "Title": "CalculatorEngine.cs",
-              "DocumentMoniker": "C:\\Users\\40720\\OneDrive\\Desktop\\FACULTATE\\AN II\\SEM II\\Medii Vizuale de Programare\\Tema1Calculator\\CalculatorEngine.cs",
+              "DocumentMoniker": "C:\\Users\\40720\\OneDrive\\Desktop\\FACULTATE\\AN II\\SEM II\\Medii Vizuale de Programare\\MyComputer\\Tema1Calculator\\CalculatorEngine.cs",
               "RelativeDocumentMoniker": "CalculatorEngine.cs",
-              "ToolTip": "C:\\Users\\40720\\OneDrive\\Desktop\\FACULTATE\\AN II\\SEM II\\Medii Vizuale de Programare\\Tema1Calculator\\CalculatorEngine.cs",
+              "ToolTip": "C:\\Users\\40720\\OneDrive\\Desktop\\FACULTATE\\AN II\\SEM II\\Medii Vizuale de Programare\\MyComputer\\Tema1Calculator\\CalculatorEngine.cs",
               "RelativeToolTip": "CalculatorEngine.cs",
-              "ViewState": "AgIAALYAAAAAAAAAAAAqwHcAAAAdAAAAAAAAAA==",
+              "ViewState": "AgIAAKUAAAAAz8zMzMwmwP4AAAAcAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-03-04T20:16:44.871Z",
               "IsPinned": true,
@@ -50,11 +46,11 @@
               "$type": "Document",
               "DocumentIndex": 1,
               "Title": "CalculatorViewModel.cs",
-              "DocumentMoniker": "C:\\Users\\40720\\OneDrive\\Desktop\\FACULTATE\\AN II\\SEM II\\Medii Vizuale de Programare\\Tema1Calculator\\CalculatorViewModel.cs",
+              "DocumentMoniker": "C:\\Users\\40720\\OneDrive\\Desktop\\FACULTATE\\AN II\\SEM II\\Medii Vizuale de Programare\\MyComputer\\Tema1Calculator\\CalculatorViewModel.cs",
               "RelativeDocumentMoniker": "CalculatorViewModel.cs",
-              "ToolTip": "C:\\Users\\40720\\OneDrive\\Desktop\\FACULTATE\\AN II\\SEM II\\Medii Vizuale de Programare\\Tema1Calculator\\CalculatorViewModel.cs",
+              "ToolTip": "C:\\Users\\40720\\OneDrive\\Desktop\\FACULTATE\\AN II\\SEM II\\Medii Vizuale de Programare\\MyComputer\\Tema1Calculator\\CalculatorViewModel.cs",
               "RelativeToolTip": "CalculatorViewModel.cs",
-              "ViewState": "AgIAAHMAAAAAAAAAAAArwIEAAAANAAAAAAAAAA==",
+              "ViewState": "AgIAABYBAAAAAAAAAAAawCIBAAA1AAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-03-04T20:18:00.702Z",
               "IsPinned": true,
@@ -62,26 +58,13 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 4,
-              "Title": "AssemblyInfo.cs",
-              "DocumentMoniker": "C:\\Users\\40720\\OneDrive\\Desktop\\FACULTATE\\AN II\\SEM II\\Medii Vizuale de Programare\\Tema1Calculator\\AssemblyInfo.cs",
-              "RelativeDocumentMoniker": "AssemblyInfo.cs",
-              "ToolTip": "C:\\Users\\40720\\OneDrive\\Desktop\\FACULTATE\\AN II\\SEM II\\Medii Vizuale de Programare\\Tema1Calculator\\AssemblyInfo.cs",
-              "RelativeToolTip": "AssemblyInfo.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-03-11T12:16:40.468Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 0,
               "Title": "MainWindow.xaml.cs",
-              "DocumentMoniker": "C:\\Users\\40720\\OneDrive\\Desktop\\FACULTATE\\AN II\\SEM II\\Medii Vizuale de Programare\\Tema1Calculator\\MainWindow.xaml.cs",
+              "DocumentMoniker": "C:\\Users\\40720\\OneDrive\\Desktop\\FACULTATE\\AN II\\SEM II\\Medii Vizuale de Programare\\MyComputer\\Tema1Calculator\\MainWindow.xaml.cs",
               "RelativeDocumentMoniker": "MainWindow.xaml.cs",
-              "ToolTip": "C:\\Users\\40720\\OneDrive\\Desktop\\FACULTATE\\AN II\\SEM II\\Medii Vizuale de Programare\\Tema1Calculator\\MainWindow.xaml.cs",
+              "ToolTip": "C:\\Users\\40720\\OneDrive\\Desktop\\FACULTATE\\AN II\\SEM II\\Medii Vizuale de Programare\\MyComputer\\Tema1Calculator\\MainWindow.xaml.cs",
               "RelativeToolTip": "MainWindow.xaml.cs",
-              "ViewState": "AgIAAJwAAAAAAAAAAADgv7MAAAAsAAAAAAAAAA==",
+              "ViewState": "AgIAAN0AAAAAAAAAAAAiwOYAAAAmAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-03-04T20:23:52.715Z",
               "EditorCaption": ""
@@ -90,9 +73,9 @@
               "$type": "Document",
               "DocumentIndex": 3,
               "Title": "MainWindow.xaml",
-              "DocumentMoniker": "C:\\Users\\40720\\OneDrive\\Desktop\\FACULTATE\\AN II\\SEM II\\Medii Vizuale de Programare\\Tema1Calculator\\MainWindow.xaml",
+              "DocumentMoniker": "C:\\Users\\40720\\OneDrive\\Desktop\\FACULTATE\\AN II\\SEM II\\Medii Vizuale de Programare\\MyComputer\\Tema1Calculator\\MainWindow.xaml",
               "RelativeDocumentMoniker": "MainWindow.xaml",
-              "ToolTip": "C:\\Users\\40720\\OneDrive\\Desktop\\FACULTATE\\AN II\\SEM II\\Medii Vizuale de Programare\\Tema1Calculator\\MainWindow.xaml",
+              "ToolTip": "C:\\Users\\40720\\OneDrive\\Desktop\\FACULTATE\\AN II\\SEM II\\Medii Vizuale de Programare\\MyComputer\\Tema1Calculator\\MainWindow.xaml",
               "RelativeToolTip": "MainWindow.xaml",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
               "WhenOpened": "2025-03-04T08:58:36.117Z",

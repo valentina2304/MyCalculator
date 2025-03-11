@@ -17,7 +17,6 @@ namespace Tema1Calculator
             AttachButtonHandlers();
         }
 
-        // In MainWindow.xaml.cs, modify AttachButtonHandlers to include these buttons
         private void AttachButtonHandlers()
         {
             foreach (UIElement element in (FindName("Grid") as Grid).Children)
@@ -29,15 +28,6 @@ namespace Tema1Calculator
                 }
             }
 
-            // Add handlers for memory buttons in the StackPanel
-            foreach (UIElement element in (FindName("MemoryButtonsPanel") as StackPanel).Children)
-            {
-                if (element is Button button)
-                {
-                    string content = button.Content.ToString();
-                    button.Click += (s, e) => HandleButtonClick(content);
-                }
-            }
         }
 
         private void AboutMenuItem_Click(object sender, RoutedEventArgs e)
@@ -98,21 +88,7 @@ namespace Tema1Calculator
                 case "%":
                     _viewModel.Percentage();
                     break;
-                case "M+":
-                    _viewModel.MemoryAdd();
-                    break;
-                case "M-":
-                    _viewModel.MemorySubtract();
-                    break;
-                case "MR":
-                    _viewModel.MemoryRecall();
-                    break;
-                case "MC":
-                    _viewModel.MemoryClear();
-                    break;
-                case "M":
-                    _viewModel.MemoryStore();
-                    break;
+                
             }
         }
 
@@ -141,6 +117,7 @@ namespace Tema1Calculator
             {
                 case Key.Decimal:
                 case Key.OemPeriod:
+                case Key.OemComma:
                     _viewModel.EnterDigit(".");
                     break;
                 case Key.Add:
@@ -170,14 +147,14 @@ namespace Tema1Calculator
 
     private void CutMenuItem_Click(object sender, RoutedEventArgs e)
         {
-            string text = _viewModel.DisplayText;
+            string text = _viewModel.DisplayText.ToString();
             Clipboard.SetText(text);
             _viewModel.ClearEntry();
         }
 
         private void CopyMenuItem_Click(object sender, RoutedEventArgs e)
         {
-            string text = _viewModel.DisplayText;
+            string text = _viewModel.DisplayText.ToString();
             Clipboard.SetText(text);
         }
 
@@ -202,9 +179,66 @@ namespace Tema1Calculator
                         _viewModel.EnterDigit(".");
                         hasDecimal = true;
                     }
-                    // Ignore other characters
                 }
             }
+        }
+
+        private void MemoryList_Click(object sender, RoutedEventArgs e)
+        {
+            var memoryValues = _viewModel.GetMemoryList();
+            if (memoryValues.Count == 0)
+            {
+                MessageBox.Show("No values stored in memory.", "Memory", MessageBoxButton.OK, MessageBoxImage.Information);
+                return;
+            }
+
+            // Create a context menu with memory values
+            ContextMenu contextMenu = new ContextMenu();
+            foreach (var value in memoryValues)
+            {
+                MenuItem item = new MenuItem();
+                item.Header = value.ToString();
+                item.Tag = value;
+                item.Click += MemoryItem_Click;
+                contextMenu.Items.Add(item);
+            }
+
+            // Show the context menu
+            Button button = sender as Button;
+            contextMenu.PlacementTarget = button;
+            contextMenu.IsOpen = true;
+        }
+
+        private void MemoryItem_Click(object sender, RoutedEventArgs e)
+        {
+            MenuItem item = sender as MenuItem;
+            double value = (double)item.Tag;
+            _viewModel.UseValueFromMemory(value);
+        }
+
+        private void MemoryClear_Click(object sender, RoutedEventArgs e)
+        {
+            _viewModel.MemoryClear();
+        }
+
+        private void MemoryStore_Click(object sender, RoutedEventArgs e)
+        {
+            _viewModel.MemoryStore();
+        }
+
+        private void MemoryRecall_Click(object sender, RoutedEventArgs e)
+        {
+            _viewModel.MemoryRecall();
+        }
+
+        private void MemoryAdd_Click(object sender, RoutedEventArgs e)
+        {
+            _viewModel.MemoryAdd();
+        }
+
+        private void MemorySub_Click(object sender, RoutedEventArgs e)
+        {
+            _viewModel.MemorySubtract();
         }
 
     }

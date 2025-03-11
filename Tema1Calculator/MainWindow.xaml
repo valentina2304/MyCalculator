@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:Tema1Calculator"
         mc:Ignorable="d"
         KeyDown="Window_KeyDown"
-        Icon="C:/Users/40720/OneDrive/Desktop/FACULTATE/AN II/SEM II/Medii Vizuale de Programare/Tema1Calculator/OIP.jpeg"
+        Icon="C:/Users/40720/OneDrive/Desktop/FACULTATE/AN II/SEM II/Medii Vizuale de Programare/MyComputer/Tema1Calculator/OIP.jpeg"
         Title="Calculator" 
         Height="550" 
         Width="350" 
@@ -75,11 +75,12 @@
 
         <!-- StackPanel pentru alte elemente -->
         <StackPanel Name="MemoryButtonsPanel" Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
-            <Button Content="M+" FontSize="20" Margin="5" Width="40" Background="AliceBlue" BorderBrush="AliceBlue"/>
-            <Button Content="M-" FontSize="20" Margin="5" Width="40" Background="AliceBlue" BorderBrush="AliceBlue"/>
-            <Button Content="MR" FontSize="20" Margin="5" Width="40" Background="AliceBlue" BorderBrush="AliceBlue"/>
-            <Button Content="MC" FontSize="20" Margin="5" Width="40" Background="AliceBlue" BorderBrush="AliceBlue"/>
-            <Button Content="M" FontSize="20" Margin="5" Width="40" Background="AliceBlue" BorderBrush="AliceBlue"/>
+            <Button Content="M+" FontSize="20" Margin="5" Width="40" Background="AliceBlue" BorderBrush="AliceBlue" Click="MemoryAdd_Click"/>
+            <Button Content="M-" FontSize="20" Margin="5" Width="40" Background="AliceBlue" BorderBrush="AliceBlue" Click="MemorySub_Click"/>
+            <Button Content="MR" FontSize="20" Margin="5" Width="40" Background="AliceBlue" BorderBrush="AliceBlue" Click="MemoryRecall_Click"/>
+            <Button Content="MC" FontSize="20" Margin="5" Width="40" Background="AliceBlue" BorderBrush="AliceBlue" Click="MemoryClear_Click"/>
+            <Button Content="MS" FontSize="20" Margin="5" Width="40" Background="AliceBlue" BorderBrush="AliceBlue" Click="MemoryStore_Click"/>
+            <Button Content="M▼" FontSize="20" Margin="5" Width="40" Background="AliceBlue" BorderBrush="AliceBlue" Click="MemoryList_Click"/>
         </StackPanel>
 
         <!-- Grid pentru butoane -->
