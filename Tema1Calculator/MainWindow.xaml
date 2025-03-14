@@ -32,9 +32,11 @@
                 <MenuItem Header="Cut" Click="CutMenuItem_Click" />
                 <MenuItem Header="Copy" Click="CopyMenuItem_Click" />
                 <MenuItem Header="Paste" Click="PasteMenuItem_Click" />
-                <MenuItem Header="Digit Grouping" IsCheckable="True" 
-              IsChecked="{Binding DigitGroupingEnabled}" 
-              Click="DigitGrouping_Click"/>
+                <MenuItem Header="Digit Grouping" 
+                   IsCheckable="True" 
+                   IsChecked="{Binding DigitGroupingEnabled, Mode=TwoWay}" 
+                  Click="DigitGrouping_Click"/>
+
             </MenuItem>
             <MenuItem Header="Mode">
                 <MenuItem Header="Standard" />
@@ -63,14 +65,14 @@
 
             <!-- Main Display -->
             <TextBox Name="ResultTextBox" 
-                     Text="{Binding DisplayText, Mode=OneWay}" 
-                     Grid.Row="1" 
-                     HorizontalAlignment="Stretch" 
-                     FontSize="30" 
-                     Padding="5" 
-                     Height="60" 
-                     TextAlignment="Right" 
-                     IsReadOnly="True"/>
+            Text="{Binding DisplayText}" 
+            Grid.Row="1" 
+            HorizontalAlignment="Stretch" 
+            FontSize="30" 
+            Padding="5" 
+            Height="60" 
+            TextAlignment="Right" 
+            IsReadOnly="True"/>
         </Grid>
 
         <!-- StackPanel pentru alte elemente -->

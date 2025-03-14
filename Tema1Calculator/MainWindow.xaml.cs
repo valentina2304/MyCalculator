@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using System.Globalization;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using Tema1Calculator;
@@ -36,8 +37,13 @@ namespace Tema1Calculator
         }
         private void DigitGrouping_Click(object sender, RoutedEventArgs e)
         {
-            _viewModel.DigitGroupingEnabled = true;
+            MenuItem menuItem = sender as MenuItem;
+            if (menuItem != null)
+            {
+                _viewModel.DigitGroupingEnabled = menuItem.IsChecked;
+            }
         }
+
         private void HandleButtonClick(string content)
         {
             switch (content)
@@ -118,7 +124,7 @@ namespace Tema1Calculator
                 case Key.Decimal:
                 case Key.OemPeriod:
                 case Key.OemComma:
-                    _viewModel.EnterDigit(".");
+                    _viewModel.EnterDigit(CultureInfo.CurrentCulture.NumberFormat.NumberDecimalSeparator);
                     break;
                 case Key.Add:
                     _viewModel.SetOperation("+");
@@ -131,6 +137,9 @@ namespace Tema1Calculator
                     break;
                 case Key.Divide:
                     _viewModel.SetOperation("/");
+                    break;
+                case Key.Back:
+                    _viewModel.Backspace();
                     break;
                 case Key.Enter:
                     _viewModel.Calculate();

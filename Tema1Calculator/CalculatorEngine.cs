@@ -39,10 +39,8 @@ namespace Tema1Calculator
 
         public void ValidateAndEnterDigit(string digit)
         {
-            if (!Regex.IsMatch(digit, @"^[0-9.]$"))
-                throw new ArgumentException("Invalid input: Only digits and decimal point allowed");
+            string decimalSeparator = CultureInfo.CurrentCulture.NumberFormat.NumberDecimalSeparator;
 
-            // If starting a new number, reset current value
             if (_isNewNumber)
             {
                 _currentValue = 0;
@@ -50,35 +48,35 @@ namespace Tema1Calculator
                 _hasDecimalPoint = false;
             }
 
-            if (digit == ".")
+            if (digit == decimalSeparator)
             {
                 if (_hasDecimalPoint)
-                    return; // Already has decimal point
+                    return; 
 
                 _hasDecimalPoint = true;
                 return;
             }
 
-            // For regular digits
             if (!_hasDecimalPoint)
             {
-                // For whole number part
                 _currentValue = _currentValue * 10 + double.Parse(digit);
             }
             else
             {
-                // For decimal part
-                string currentValueStr = _currentValue.ToString(CultureInfo.InvariantCulture);
-                _currentValue = double.Parse(currentValueStr + digit, CultureInfo.InvariantCulture);
+                string currentValueStr = _currentValue.ToString(CultureInfo.CurrentCulture);
+                if (!currentValueStr.Contains(decimalSeparator))
+                    currentValueStr += decimalSeparator;
+
+                _currentValue = double.Parse(currentValueStr + digit, CultureInfo.CurrentCulture);
             }
         }
+
         public double SetOperation(string operation)
         {
             string[] validOperations = { "+", "-", "*", "/" };
             if (Array.IndexOf(validOperations, operation) == -1)
                 throw new ArgumentException("Invalid operation");
 
-            // If there's a pending operation, calculate it first
             if (!string.IsNullOrEmpty(_currentOperation))
             {
                 try
@@ -91,7 +89,6 @@ namespace Tema1Calculator
                 }
             }
 
-            // Save the current value and setup for next input
             _storedValue = _currentValue;
             _currentOperation = operation;
             _isNewNumber = true;
@@ -155,7 +152,6 @@ namespace Tema1Calculator
             }
             else
             {
-                // Remove last character
                 string newValueStr = currentValueStr.Substring(0, currentValueStr.Length - 1);
                 _currentValue = double.Parse(newValueStr);
                 _hasDecimalPoint = newValueStr.Contains(".");
@@ -252,7 +248,11 @@ namespace Tema1Calculator
 
         public double RecallMemory()
         {
-            return _memory; 
+            if (_memoryList.Count == 0)
+                return 0;
+            int lastIndex = _memoryList.Count - 1;
+            double lastValue = _memoryList[lastIndex];
+            return lastValue;
         }
 
         public void UseValueFromMemory(double value)

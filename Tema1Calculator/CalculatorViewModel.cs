@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Globalization;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
@@ -13,27 +14,31 @@ namespace Tema1Calculator
     public class CalculatorViewModel : INotifyPropertyChanged
     {
         private readonly CalculatorEngine _calculatorEngine;
-        private double _displayText;
+        private string _displayText;
         private string _operationHistory;
+        private bool _digitGroupingEnabled;
+
 
         public event PropertyChangedEventHandler PropertyChanged;
 
         public CalculatorViewModel()
         {
             _calculatorEngine = new CalculatorEngine();
-            _displayText =0;
+            _displayText ="0";
             _operationHistory = "";
+            _digitGroupingEnabled = false;
         }
 
-        public double DisplayText
+        public string DisplayText
         {
             get => _displayText;
-            private set
+            set
             {
                 _displayText = value;
                 OnPropertyChanged();
             }
         }
+
 
         public string OperationHistory
         {
@@ -90,6 +95,11 @@ namespace Tema1Calculator
         {
             try
             {
+                string decimalSeparator = CultureInfo.CurrentCulture.NumberFormat.NumberDecimalSeparator;
+                if (digit == "." || digit == ",")
+                {
+                    digit = decimalSeparator;
+                }
                 _calculatorEngine.ValidateAndEnterDigit(digit);
                 UpdateDisplay(_calculatorEngine.CurrentValue);
             }
@@ -107,7 +117,7 @@ namespace Tema1Calculator
         {
             try
             {
-                double result = _calculatorEngine.SetOperation(operation);
+                string result = _calculatorEngine.SetOperation(operation).ToString();
                 UpdateDisplayWithHistory(result, operation);
             }
             catch (ArgumentException)
@@ -120,7 +130,7 @@ namespace Tema1Calculator
         {
             try
             {
-                double result = _calculatorEngine.Calculate();
+                string result = _calculatorEngine.Calculate().ToString();
                 UpdateDisplayWithHistory(result, "=");
             }
             catch (DivideByZeroException)
@@ -135,10 +145,10 @@ namespace Tema1Calculator
 
         private void UpdateDisplay(double value)
         {
-            DisplayText =value;
+            DisplayText = FormatNumber(value.ToString(CultureInfo.InvariantCulture));
         }
 
-        private bool _digitGroupingEnabled = false;
+
 
         public bool DigitGroupingEnabled
         {
@@ -146,13 +156,12 @@ namespace Tema1Calculator
             set
             {
                 _digitGroupingEnabled = value;
-                OnPropertyChanged();
-                // Re-format the current display with the new setting
+                OnPropertyChanged(nameof(DigitGroupingEnabled));
                 UpdateDisplay(_calculatorEngine.CurrentValue);
             }
         }
 
-        private void UpdateDisplayWithHistory(double value, string operation)
+        private void UpdateDisplayWithHistory(string value, string operation)
         {
             DisplayText = value;
 
@@ -166,24 +175,43 @@ namespace Tema1Calculator
             }
         }
 
-        private string FormatNumber(double value)
+        private string FormatNumber(string valueStr)
         {
-            if (DigitGroupingEnabled)
+            if (double.TryParse(valueStr, System.Globalization.NumberStyles.Any,
+                                System.Globalization.CultureInfo.InvariantCulture, out double value))
             {
-                // Use current culture to properly format the number with appropriate separators
-                return value.ToString("N", System.Globalization.CultureInfo.CurrentCulture);
+                if (DigitGroupingEnabled)
+                {
+                    if (value == Math.Floor(value))
+                    {
+                        return value.ToString("N0", System.Globalization.CultureInfo.CurrentCulture);
+                    }
+                    else
+                    {
+                        int decimalPlaces = 0;
+                        int decimalIndex = valueStr.IndexOf('.');
+
+                        if (decimalIndex >= 0)
+                        {
+                            decimalPlaces = valueStr.Length - decimalIndex - 1;
+                        }
+
+                        return value.ToString($"N{decimalPlaces}", System.Globalization.CultureInfo.CurrentCulture);
+                    }
+                }
+                else
+                {
+                    return valueStr;
+                }
             }
-            else
-            {
-                // Original formatting without digit grouping
-                return value.ToString("0.##########");
-            }
+
+            return valueStr;
         }
 
         public void Clear()
         {
             _calculatorEngine.Reset();
-            DisplayText = 0;
+            DisplayText = "0";
             OperationHistory = "";
         }
 
