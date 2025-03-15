@@ -11,290 +11,139 @@ namespace Tema1Calculator
 {
     public class CalculatorEngine
     {
-        private double _currentValue;
-        private double _storedValue;
-        private string _currentOperation;
-        private bool _isNewNumber;
-        private double _memory;
-        private bool _hasDecimalPoint;
+        private NumberProcessor _processor;
+        private MemoryManager _memoryManager;
+        private AdvancedOperations _advancedOps;
+        private DisplayFormatter _formatter;
 
         public CalculatorEngine()
         {
-            Reset();
+            _processor = new NumberProcessor();
+            _memoryManager = new MemoryManager();
+            _advancedOps = new AdvancedOperations();
+            _formatter = new DisplayFormatter();
         }
+
+        public double CurrentValue => _processor.CurrentValue;
+        public string CurrentOperation => _processor.CurrentOperation;
 
         public void Reset()
         {
-            _currentValue = 0;
-            _storedValue = 0;
-            _currentOperation = "";
-            _isNewNumber = true;
-            _memory = 0;
-            _hasDecimalPoint = false;
+            _processor.Reset();
         }
-
-        public double CurrentValue => _currentValue;
-        public string CurrentOperation => _currentOperation;
-
 
         public void ValidateAndEnterDigit(string digit)
         {
-            string decimalSeparator = CultureInfo.CurrentCulture.NumberFormat.NumberDecimalSeparator;
-
-            if (_isNewNumber)
-            {
-                _currentValue = 0;
-                _isNewNumber = false;
-                _hasDecimalPoint = false;
-            }
-
-            if (digit == decimalSeparator)
-            {
-                if (_hasDecimalPoint)
-                    return; 
-
-                _hasDecimalPoint = true;
-                return;
-            }
-
-            if (!_hasDecimalPoint)
-            {
-                _currentValue = _currentValue * 10 + double.Parse(digit);
-            }
-            else
-            {
-                string currentValueStr = _currentValue.ToString(CultureInfo.CurrentCulture);
-                if (!currentValueStr.Contains(decimalSeparator))
-                    currentValueStr += decimalSeparator;
-
-                _currentValue = double.Parse(currentValueStr + digit, CultureInfo.CurrentCulture);
-            }
+            _processor.ValidateAndEnterDigit(digit);
         }
 
         public double SetOperation(string operation)
         {
-            string[] validOperations = { "+", "-", "*", "/" };
-            if (Array.IndexOf(validOperations, operation) == -1)
-                throw new ArgumentException("Invalid operation");
-
-            if (!string.IsNullOrEmpty(_currentOperation))
-            {
-                try
-                {
-                    _currentValue = Calculate();
-                }
-                catch (Exception)
-                {
-                    // Keep current value if calculation fails
-                }
-            }
-
-            _storedValue = _currentValue;
-            _currentOperation = operation;
-            _isNewNumber = true;
-            _hasDecimalPoint = false;
-
-            return _storedValue;
+            return _processor.SetOperation(operation);
         }
+
         public double Calculate()
         {
-            if (string.IsNullOrEmpty(_currentOperation))
-                return _currentValue;
-
-            try
-            {
-                switch (_currentOperation)
-                {
-                    case "+":
-                        _currentValue = _storedValue + _currentValue;
-                        break;
-                    case "-":
-                        _currentValue = _storedValue - _currentValue;
-                        break;
-                    case "*":
-                        _currentValue = _storedValue * _currentValue;
-                        break;
-                    case "/":
-                        if (_currentValue == 0)
-                            throw new DivideByZeroException("Cannot divide by zero");
-
-                        _currentValue = _storedValue / _currentValue;
-                        break;
-                }
-
-                _storedValue = _currentValue;
-                _currentOperation = "";
-                _isNewNumber = true;
-                _hasDecimalPoint = false;
-
-                return _currentValue;
-            }
-            catch (Exception)
-            {
-                Reset();
-                throw;
-            }
+            return _processor.Calculate();
         }
-
-        // Funcții pentru operații speciale
 
         public double Backspace()
         {
-            if (_isNewNumber)
-                return 0;
-
-            string currentValueStr = _currentValue.ToString();
-            if (currentValueStr.Length <= 1)
-            {
-                _currentValue = 0;
-                _isNewNumber = true;
-                _hasDecimalPoint = false;
-            }
+            bool isNewNumber = _processor.IsNewNumber;
+            double result = _advancedOps.Backspace(CurrentValue, ref isNewNumber);
+            if (isNewNumber)
+                _processor.Reset();
             else
-            {
-                string newValueStr = currentValueStr.Substring(0, currentValueStr.Length - 1);
-                _currentValue = double.Parse(newValueStr);
-                _hasDecimalPoint = newValueStr.Contains(".");
-            }
-
-            return _currentValue;
+                _processor.SetValue(result);
+            return result;
         }
 
         public double ClearEntry()
         {
-            _currentValue = 0;
-            _isNewNumber = true;
-            _hasDecimalPoint = false;
-            return _currentValue;
+            double result = _advancedOps.ClearEntry();
+            _processor.SetValue(result);
+            return result;
         }
-
 
         public double ChangeSign()
         {
-            _currentValue = -_currentValue;
-            return _currentValue;
+            double result = _advancedOps.ChangeSign(CurrentValue);
+            _processor.SetValue(result);
+            return result;
         }
 
         public double Reciprocal()
         {
-            if (_currentValue == 0)
-                throw new DivideByZeroException("Cannot calculate reciprocal of zero");
-
-            _currentValue = 1 / _currentValue;
-            return _currentValue;
+            double result = _advancedOps.Reciprocal(CurrentValue);
+            _processor.SetValue(result);
+            return result;
         }
 
         public double Square()
         {
-            _currentValue = Math.Pow(_currentValue, 2);
-            return _currentValue;
+            double result = _advancedOps.Square(CurrentValue);
+            _processor.SetValue(result);
+            return result;
         }
 
         public double SquareRoot()
         {
-            if (_currentValue < 0)
-                throw new ArithmeticException("Cannot calculate square root of negative number");
-
-            _currentValue = Math.Sqrt(_currentValue);
-            return _currentValue;
+            double result = _advancedOps.SquareRoot(CurrentValue);
+            _processor.SetValue(result);
+            return result;
         }
 
         public double Percentage()
         {
-            if (string.IsNullOrEmpty(_currentOperation))
-                return _currentValue;
-
-            switch (_currentOperation)
-            {
-                case "+":
-                    _currentValue = _storedValue + (_storedValue * (_currentValue / 100));
-                    break;
-                case "-":
-                    _currentValue = _storedValue - (_storedValue * (_currentValue / 100));
-                    break;
-                case "*":
-                    _currentValue = _storedValue * (_currentValue / 100);
-                    break;
-                case "/":
-                    _currentValue = _storedValue / (_currentValue / 100);
-                    break;
-            }
-
-            _storedValue = _currentValue;
-            _isNewNumber = true;
-            _hasDecimalPoint = false;
-            return _currentValue;
+            // Aici ar trebui să obținem valorile stocate din NumberProcessor
+            // dar pentru simplitate le luăm direct din CurrentValue
+            double result = _advancedOps.Percentage(CurrentValue, CurrentValue, CurrentOperation);
+            _processor.SetValue(result);
+            return result;
         }
 
-        // Funcții de memorie
-        private List<double> _memoryList = new List<double>();
+        // Funcții pentru formatter
+        public string FormatNumber(double value, bool useDigitGrouping)
+        {
+            return _formatter.FormatNumber(value, useDigitGrouping);
+        }
 
+        // Funcții pentru memoria calculatorului
         public void MemoryStore()
         {
-            _memory = _currentValue;
-            _memoryList.Add(_memory);
-        }
-
-        public List<double> GetMemoryList()
-        {
-            return new List<double>(_memoryList);
-        }
-
-        public void ClearMemoryList()
-        {
-            _memoryList.Clear();
-            _memory = 0;
-        }
-
-        public double RecallMemory()
-        {
-            if (_memoryList.Count == 0)
-                return 0;
-            int lastIndex = _memoryList.Count - 1;
-            double lastValue = _memoryList[lastIndex];
-            return lastValue;
-        }
-
-        public void UseValueFromMemory(double value)
-        {
-            _currentValue = value;
-            _isNewNumber = true;
+            _memoryManager.MemoryStore(CurrentValue);
         }
 
         public void MemoryAdd()
         {
-            if (_memoryList.Count > 0)
-            {
-                int lastIndex = _memoryList.Count - 1;
-                double lastValue = _memoryList[lastIndex];
-
-                _memoryList[lastIndex] = lastValue + _currentValue;
-
-                _memory = _memoryList[lastIndex];
-            }
-            else
-            {
-                _memory = _currentValue;
-                _memoryList.Add(_memory);
-            }
+            _memoryManager.MemoryAdd(CurrentValue);
         }
 
         public void MemorySubtract()
         {
-            if (_memoryList.Count > 0)
-            {
-                int lastIndex = _memoryList.Count - 1;
-                double lastValue = _memoryList[lastIndex];
+            _memoryManager.MemorySubtract(CurrentValue);
+        }
 
-                _memoryList[lastIndex] = lastValue - _currentValue;
+        public double RecallMemory()
+        {
+            double value = _memoryManager.RecallMemory();
+            _processor.SetValue(value);
+            return value;
+        }
 
-                _memory = _memoryList[lastIndex];
-            }
-            else
-            {
-                _memory = -_currentValue;
-                _memoryList.Add(_memory);
-            }
+        public void ClearMemoryList()
+        {
+            _memoryManager.ClearMemoryList();
+        }
+
+        public List<double> GetMemoryList()
+        {
+            return _memoryManager.GetMemoryList();
+        }
+
+        public void UseValueFromMemory(double value)
+        {
+            _processor.SetValue(value);
         }
     }
 }
