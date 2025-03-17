@@ -24,6 +24,9 @@ namespace Tema1Calculator
         public string CurrentOperation => _currentOperation;
         public bool IsNewNumber => _isNewNumber;
 
+        public bool HasDecimalPoint => _hasDecimalPoint;
+        public double StoredValue => _storedValue;
+
         public void Reset()
         {
             _currentValue = 0;
@@ -44,6 +47,7 @@ namespace Tema1Calculator
                 _hasDecimalPoint = false;
             }
 
+            // Handle decimal point
             if (digit == decimalSeparator)
             {
                 if (_hasDecimalPoint)
@@ -53,9 +57,23 @@ namespace Tema1Calculator
                 return;
             }
 
+            int digitValue;
+
+            // Convert hex digits to their decimal value
+            if (digit.Length == 1 && "ABCDEF".Contains(digit.ToUpper()))
+            {
+                digitValue = "ABCDEF".IndexOf(digit.ToUpper()) + 10;
+            }
+            else
+            {
+                // Regular digit
+                if (!int.TryParse(digit, out digitValue))
+                    return;
+            }
+
             if (!_hasDecimalPoint)
             {
-                _currentValue = _currentValue * 10 + double.Parse(digit);
+                _currentValue = _currentValue * 10 + digitValue;
             }
             else
             {
@@ -66,7 +84,6 @@ namespace Tema1Calculator
                 _currentValue = double.Parse(currentValueStr + digit, CultureInfo.CurrentCulture);
             }
         }
-
         public double SetOperation(string operation)
         {
             string[] validOperations = { "+", "-", "*", "/" };

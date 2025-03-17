@@ -42,5 +42,6 @@ namespace Tema1Calculator
 
             return valueStr;
         }
+
     }
 }

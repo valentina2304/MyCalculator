@@ -5,7 +5,6 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using System.Globalization; // Adaugă acest using
 
 namespace Tema1Calculator
 {
@@ -15,6 +14,7 @@ namespace Tema1Calculator
         private MemoryManager _memoryManager;
         private AdvancedOperations _advancedOps;
         private DisplayFormatter _formatter;
+        private bool _digitGroupingEnabeld;
 
         public CalculatorEngine()
         {
@@ -95,9 +95,8 @@ namespace Tema1Calculator
 
         public double Percentage()
         {
-            // Aici ar trebui să obținem valorile stocate din NumberProcessor
-            // dar pentru simplitate le luăm direct din CurrentValue
-            double result = _advancedOps.Percentage(CurrentValue, CurrentValue, CurrentOperation);
+
+            double result = _advancedOps.Percentage(CurrentValue, _processor.StoredValue, CurrentOperation);
             _processor.SetValue(result);
             return result;
         }
@@ -107,6 +106,31 @@ namespace Tema1Calculator
         {
             return _formatter.FormatNumber(value, useDigitGrouping);
         }
+
+        public string FormatNumberInBase(double value, int numberBase)
+        {
+            if (value != Math.Floor(value) || value < 0)
+            {
+                // Non-integers or negative numbers can only be displayed in base 10
+                return value.ToString();
+            }
+
+            long longValue = (long)value;
+            switch (numberBase)
+            {
+                case 2:
+                    return Convert.ToString(longValue, 2);
+                case 8:
+                    return Convert.ToString(longValue, 8);
+                case 10:
+                    return FormatNumber(value, _digitGroupingEnabeld);
+                case 16:
+                    return Convert.ToString(longValue, 16).ToUpper();
+                default:
+                    return value.ToString();
+            }
+        }
+
 
         // Funcții pentru memoria calculatorului
         public void MemoryStore()
@@ -145,5 +169,7 @@ namespace Tema1Calculator
         {
             _processor.SetValue(value);
         }
+
+
     }
 }

@@ -4,6 +4,8 @@
              xmlns:local="clr-namespace:Tema1Calculator"
              StartupUri="MainWindow.xaml">
     <Application.Resources>
-         
+        <local:ModeConverter x:Key="ModeConverter"/>
+        <local:BaseConverter x:Key="BaseConverter"/>
+        <local:ModeToVisibilityConverter x:Key="ModeToVisibilityConverter"/>
     </Application.Resources>
 </Application>

@@ -1,0 +1,22 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2012/06/nuspec.xsd">
+  <metadata>
+    <id>Tema1Calculator</id>
+    <version>1.0.0</version>
+    <authors>Tema1Calculator</authors>
+    <description>Package Description</description>
+    <repository type="git" commit="8de2000a6cdc586078fb6ba1535d4b1da82e4492" />
+    <dependencies>
+      <group targetFramework="net8.0-windows7.0" />
+    </dependencies>
+    <frameworkReferences>
+      <group targetFramework="net8.0-windows7.0">
+        <frameworkReference name="Microsoft.WindowsDesktop.App.WPF" />
+      </group>
+    </frameworkReferences>
+  </metadata>
+  <files>
+    <file src="C:\Users\40720\OneDrive\Desktop\FACULTATE\AN II\SEM II\Medii Vizuale de Programare\MyComputer\Tema1Calculator\bin\Debug\net8.0-windows\Tema1Calculator.runtimeconfig.json" target="lib\net8.0-windows7.0\Tema1Calculator.runtimeconfig.json" />
+    <file src="C:\Users\40720\OneDrive\Desktop\FACULTATE\AN II\SEM II\Medii Vizuale de Programare\MyComputer\Tema1Calculator\bin\Debug\net8.0-windows\Tema1Calculator.dll" target="lib\net8.0-windows7.0\Tema1Calculator.dll" />
+  </files>
+</package>

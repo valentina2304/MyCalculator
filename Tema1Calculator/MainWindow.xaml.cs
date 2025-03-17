@@ -1,6 +1,7 @@
 ﻿using System.Globalization;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Data;
 using System.Windows.Input;
 using Tema1Calculator;
 
@@ -16,6 +17,8 @@ namespace Tema1Calculator
             _viewModel = new CalculatorViewModel();
             DataContext = _viewModel;
             AttachButtonHandlers();
+            AttachProgrammerButtonHandlers();
+
         }
 
         private void AttachButtonHandlers()
@@ -100,7 +103,6 @@ namespace Tema1Calculator
 
         private void Window_KeyDown(object sender, KeyEventArgs e)
         {
-            // For number keys (D0-D9)
             if (e.Key >= Key.D0 && e.Key <= Key.D9)
             {
                 string digit = (e.Key - Key.D0).ToString();
@@ -109,7 +111,6 @@ namespace Tema1Calculator
                 return;
             }
 
-            // For number pad keys (NumPad0-NumPad9)
             if (e.Key >= Key.NumPad0 && e.Key <= Key.NumPad9)
             {
                 string digit = (e.Key - Key.NumPad0).ToString();
@@ -118,7 +119,6 @@ namespace Tema1Calculator
                 return;
             }
 
-            // For other keys
             switch (e.Key)
             {
                 case Key.Decimal:
@@ -173,7 +173,6 @@ namespace Tema1Calculator
             {
                 string text = Clipboard.GetText();
 
-                // Clear current entry before pasting
                 _viewModel.ClearEntry();
 
                 bool hasDecimal = false;
@@ -201,7 +200,6 @@ namespace Tema1Calculator
                 return;
             }
 
-            // Create a context menu with memory values
             ContextMenu contextMenu = new ContextMenu();
             foreach (var value in memoryValues)
             {
@@ -212,7 +210,6 @@ namespace Tema1Calculator
                 contextMenu.Items.Add(item);
             }
 
-            // Show the context menu
             Button button = sender as Button;
             contextMenu.PlacementTarget = button;
             contextMenu.IsOpen = true;
@@ -250,6 +247,93 @@ namespace Tema1Calculator
             _viewModel.MemorySubtract();
         }
 
+
+        private void ModeMenuItem_Click(object sender, RoutedEventArgs e)
+        {
+            MenuItem menuItem = sender as MenuItem;
+            if (menuItem != null)
+            {
+                _viewModel.CalculatorMode = menuItem.Header.ToString();
+            }
+
+            if (sender == StandardMenuItem)
+            {
+                this.Title = "Calculator - Standard";
+            }
+            else if (sender == ProgrammerMenuItem)
+            {
+                this.Title = "Calculator - Programmer";
+            }
+        }
+
+
+
+        private void BaseRadioButton_Click(object sender, RoutedEventArgs e)
+        {
+            RadioButton radioButton = sender as RadioButton;
+            if (radioButton != null && radioButton.Tag != null)
+            {
+                int selectedBase = int.Parse(radioButton.Tag.ToString());
+                _viewModel.ProgrammerBase = selectedBase;
+            }
+        }
+
+        private void AttachProgrammerButtonHandlers()
+        {
+            foreach (UIElement element in (FindName("ProgrammerGrid") as Grid).Children)
+            {
+                if (element is Grid grid)
+                {
+                    foreach (UIElement gridElement in grid.Children)
+                    {
+                        if (gridElement is Button button)
+                        {
+                            string content = button.Content.ToString();
+                            button.Click += (s, e) => HandleProgrammerButtonClick(content);
+                        }
+                    }
+                }
+            }
+        }
+
+        private void HandleProgrammerButtonClick(string content)
+        {
+            // Verify if content is a hexadecimal digit or an operation
+            if ((content.Length == 1 && "0123456789ABCDEF".Contains(content)))
+            {
+                // Use EnterDigitProgrammer for programmer mode
+                _viewModel.EnterDigitProgrammer(content);
+            }
+            else if (content == "+" || content == "-" || content == "*" || content == "/" ||
+                    content == "=" || content == "C" || content == "CE" || content == "⌫" || content == "%")
+            {
+                // Handle operations
+                switch (content)
+                {
+                    case "+":
+                    case "-":
+                    case "*":
+                    case "/":
+                        _viewModel.SetOperation(content);
+                        break;
+                    case "=":
+                        _viewModel.Calculate();
+                        break;
+                    case "C ":
+                        _viewModel.Clear();
+                        break;
+                    case "CE":
+                        _viewModel.ClearEntry();
+                        break;
+                    case "⌫":
+                        _viewModel.Backspace();
+                        break;
+                    case "%":
+                        _viewModel.Percentage();
+                        break;
+                }
+            }
+        }
     }
 }
     

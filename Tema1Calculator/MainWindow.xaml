@@ -7,7 +7,7 @@
         mc:Ignorable="d"
         KeyDown="Window_KeyDown"
         Icon="C:/Users/40720/OneDrive/Desktop/FACULTATE/AN II/SEM II/Medii Vizuale de Programare/MyComputer/Tema1Calculator/OIP1.jpeg"
-        Title="Calculator" 
+        Title="Calculator - Standard" 
         Height="550" 
         Width="350" 
         Background="AliceBlue"
@@ -15,6 +15,11 @@
         MinWidth="300" 
         MinHeight="450"
         Focusable="True">
+    <Window.Resources>
+        <local:ModeConverter x:Key="ModeConverter" />
+        <local:ModeToVisibilityConverter x:Key="ModeToVisibilityConverter" />
+    </Window.Resources>
+    
     <Grid Background="#FFA4D1DD">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
@@ -40,9 +45,9 @@
 
             </MenuItem>
             <MenuItem Header="Mode">
-                <MenuItem Header="Standard" />
-                <Separator></Separator>
-                <MenuItem Header="Programmer"></MenuItem>
+                <MenuItem x:Name="StandardMenuItem" Header="Standard" IsCheckable="True" IsChecked="{Binding CalculatorMode, Converter={StaticResource ModeConverter}, ConverterParameter=Standard}" Click="ModeMenuItem_Click"/>
+                <Separator/>
+                <MenuItem x:Name="ProgrammerMenuItem" Header="Programmer" IsCheckable="True" IsChecked="{Binding CalculatorMode, Converter={StaticResource ModeConverter}, ConverterParameter=Programmer}" Click="ModeMenuItem_Click"/>
             </MenuItem>
 
             <MenuItem Header="_Help">
@@ -76,8 +81,9 @@
             IsReadOnly="True" Background="#FFDCF1F6"/>
         </Grid>
 
-        <!-- StackPanel pentru alte elemente -->
-        <StackPanel Name="MemoryButtonsPanel" Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Center" Background="#FF9DD2D8" Grid.ColumnSpan="2" Margin="25,0,0,0">
+        <!-- StackPanel pentru elemntele de memorie-->
+        <StackPanel Name="MemoryButtonsPanel" Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Center" Background="#FF9DD2D8" Grid.ColumnSpan="2" Margin="25,0,0,0"
+                    Visibility="{Binding CalculatorMode, Converter={StaticResource ModeToVisibilityConverter}, ConverterParameter=Standard}">
             <Button Content="M+" FontSize="20" Margin="5" Width="40" Background="#FF9DD2D8" BorderBrush="AliceBlue"  Click="MemoryAdd_Click"/>
             <Button Content="M-" FontSize="20" Margin="5" Width="40" Background="#FF9DD2D8" BorderBrush="AliceBlue" Click="MemorySub_Click"/>
             <Button Content="MR" FontSize="20" Margin="5" Width="40" Background="#FF9DD2D8" BorderBrush="AliceBlue" Click="MemoryRecall_Click"/>
@@ -86,9 +92,9 @@
             <Button Content="M▼" FontSize="20" Margin="5" Width="40" Background="#FF9DD2D8" BorderBrush="AliceBlue" Click="MemoryList_Click"/>
         </StackPanel>
 
-        <!-- Grid pentru butoane -->
-        <Grid Name="Grid" Grid.Row="3" Margin="10,10,10,10" Grid.ColumnSpan="2">
-            <Grid.RowDefinitions>
+        <!-- Grid pentru modul standard-->
+        <Grid Name="Grid" Grid.Row="3" Margin="10,10,10,10" Grid.ColumnSpan="2" Visibility="{Binding CalculatorMode, Converter={StaticResource ModeToVisibilityConverter}, ConverterParameter=Standard}">
+            <Grid.RowDefinitions>   
                 <RowDefinition Height="*"/>
                 <RowDefinition Height="*"/>
                 <RowDefinition Height="*"/>
@@ -135,5 +141,108 @@
             <Button Content="." Grid.Row="5" Grid.Column="2" FontSize="20" Margin="5" Background="#FF57979F"/>
             <Button Content="=" Grid.Row="5" Grid.Column="3" FontSize="20" Margin="5" Background="#FF57979F"/>
         </Grid>
+        
+        
+        <!-- Grid pentru modul Programmer -->
+        <Grid Name="ProgrammerGrid" Grid.Row="3" Margin="10,10,10,10" Grid.ColumnSpan="2" Visibility="{Binding CalculatorMode, Converter={StaticResource ModeToVisibilityConverter}, ConverterParameter=Programmer}">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+
+            <!-- Panoul pentru afișarea valorilor în diferite baze -->
+            <StackPanel Grid.Row="0" Background="#FFA4D1DD">
+                <Grid Margin="5">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="60"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+
+                    <!-- HEX -->
+                    <TextBlock Grid.Row="0" Grid.Column="0" Text="HEX" VerticalAlignment="Center" FontWeight="Bold" Margin="5"/>
+                    <TextBox Grid.Row="0" Grid.Column="1" IsReadOnly="True" Background="#FFDCF1F6" 
+                     Text="{Binding HexValue}" TextAlignment="Right" Margin="2" Padding="5"/>
+
+                    <!-- DEC -->
+                    <TextBlock Grid.Row="1" Grid.Column="0" Text="DEC" VerticalAlignment="Center" FontWeight="Bold" Margin="5"/>
+                    <TextBox Grid.Row="1" Grid.Column="1" IsReadOnly="True" Background="#FFDCF1F6" 
+                     Text="{Binding DecValue}" TextAlignment="Right" Margin="2" Padding="5"/>
+
+                    <!-- OCT -->
+                    <TextBlock Grid.Row="2" Grid.Column="0" Text="OCT" VerticalAlignment="Center" FontWeight="Bold" Margin="5"/>
+                    <TextBox Grid.Row="2" Grid.Column="1" IsReadOnly="True" Background="#FFDCF1F6" 
+                     Text="{Binding OctValue}" TextAlignment="Right" Margin="2" Padding="5"/>
+
+                    <!-- BIN -->
+                    <TextBlock Grid.Row="3" Grid.Column="0" Text="BIN" VerticalAlignment="Center" FontWeight="Bold" Margin="5"/>
+                    <TextBox Grid.Row="3" Grid.Column="1" IsReadOnly="True" Background="#FFDCF1F6" 
+                     Text="{Binding BinValue}" TextAlignment="Right" Margin="2" Padding="5" TextWrapping="Wrap"/>
+                </Grid>
+            </StackPanel>
+
+            <Grid Grid.Row="1" Margin="0,10,0,0">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <StackPanel Grid.Row="0" Grid.ColumnSpan="4" Orientation="Horizontal" HorizontalAlignment="Center">
+                    <RadioButton Content="HEX" GroupName="Base" Margin="5" IsChecked="{Binding ProgrammerBase, Converter={StaticResource BaseConverter}, ConverterParameter=16}" Click="BaseRadioButton_Click" Tag="16"/>
+                    <RadioButton Content="DEC" GroupName="Base" Margin="5" IsChecked="{Binding ProgrammerBase, Converter={StaticResource BaseConverter}, ConverterParameter=10}" Click="BaseRadioButton_Click" Tag="10"/>
+                    <RadioButton Content="OCT" GroupName="Base" Margin="5" IsChecked="{Binding ProgrammerBase, Converter={StaticResource BaseConverter}, ConverterParameter=8}" Click="BaseRadioButton_Click" Tag="8"/>
+                    <RadioButton Content="BIN" GroupName="Base" Margin="5" IsChecked="{Binding ProgrammerBase, Converter={StaticResource BaseConverter}, ConverterParameter=2}" Click="BaseRadioButton_Click" Tag="2"/>
+                </StackPanel>
+
+                <Button Content="A" Grid.Row="1" Grid.Column="0" FontSize="20" Margin="5" Background="#FF9DD2D8"/>
+                <Button Content="%" Grid.Row="1" Grid.Column="1" FontSize="20" Margin="5" Background="#FF57979F"/>
+                <Button Content="CE" Grid.Row="1" Grid.Column="2" FontSize="20" Margin="5" Background="#FF57979F"/>
+                <Button Content="C " Grid.Row="1" Grid.Column="3" FontSize="20" Margin="5" Background="#FF57979F"/>
+                <Button Content="⌫" Grid.Row="1" Grid.Column="4" FontSize="20" Margin="5" Background="#FF57979F"/>
+
+                <Button Content="B" Grid.Row="2" Grid.Column="0" FontSize="20" Margin="5" Background="#FF9DD2D8"/>
+                <Button Content="7" Grid.Row="2" Grid.Column="1" FontSize="20" Margin="5" Background="#FF9DD2D8"/>
+                <Button Content="8" Grid.Row="2" Grid.Column="2" FontSize="20" Margin="5" Background="#FF9DD2D8"/>
+                <Button Content="9" Grid.Row="2" Grid.Column="3" FontSize="20" Margin="5" Background="#FF9DD2D8"/>
+                <Button Content="*" Grid.Row="2" Grid.Column="4" FontSize="20" Margin="5" Background="#FF57979F"/>
+
+                <Button Content="C" Grid.Row="3" Grid.Column="0" FontSize="20" Margin="5" Background="#FF9DD2D8"/>
+                <Button Content="4" Grid.Row="3" Grid.Column="1" FontSize="20" Margin="5" Background="#FF9DD2D8"/>
+                <Button Content="5" Grid.Row="3" Grid.Column="2" FontSize="20" Margin="5" Background="#FF9DD2D8"/>
+                <Button Content="6" Grid.Row="3" Grid.Column="3" FontSize="20" Margin="5" Background="#FF9DD2D8"/>
+                <Button Content="-" Grid.Row="3" Grid.Column="4" FontSize="20" Margin="5" Background="#FF57979F"/>
+
+                <Button Content="D" Grid.Row="4" Grid.Column="0" FontSize="20" Margin="5" Background="#FF9DD2D8"/>
+                <Button Content="1" Grid.Row="4" Grid.Column="1" FontSize="20" Margin="5" Background="#FF9DD2D8"/>
+                <Button Content="2" Grid.Row="4" Grid.Column="2" FontSize="20" Margin="5" Background="#FF9DD2D8"/>
+                <Button Content="3" Grid.Row="4" Grid.Column="3" FontSize="20" Margin="5" Background="#FF9DD2D8"/>
+                <Button Content="+" Grid.Row="4" Grid.Column="4" FontSize="20" Margin="5" Background="#FF57979F"/>
+
+                <Button Content="E" Grid.Row="5" Grid.Column="0" FontSize="20" Margin="5" Background="#FF9DD2D8"/>
+                <Button Content="F" Grid.Row="5" Grid.Column="1" FontSize="20" Margin="5" Background="#FF9DD2D8"/>
+                <Button Content="0" Grid.Row="5" Grid.Column="2" FontSize="20" Margin="5" Background="#FF9DD2D8"/>
+                <Button Content="/" Grid.Row="5" Grid.Column="3" FontSize="20" Margin="5" Background="#FF57979F"/>
+                <Button Content="=" Grid.Row="5" Grid.Column="4" FontSize="20" Margin="5" Background="#FF57979F"/>
+            </Grid>
+
+        </Grid>
+        
     </Grid>
+
 </Window>
