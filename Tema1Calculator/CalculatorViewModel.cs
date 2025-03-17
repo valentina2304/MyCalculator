@@ -20,7 +20,7 @@ namespace Tema1Calculator
         private bool _digitGroupingEnabled;
         private string _calculatorMode;
         private int _programmerBase;
-
+        private bool _usePrecedenceEnabled;
 
         public event PropertyChangedEventHandler PropertyChanged;
 
@@ -29,6 +29,8 @@ namespace Tema1Calculator
             _calculatorEngine = new CalculatorEngine();
             _displayText = "0";
             _operationHistory = "";
+            _calculatorEngine.UsePrecedence = _usePrecedenceEnabled;
+
 
             _digitGroupingEnabled = SettingsManager.DigitGroupingEnabled;
             _calculatorMode = SettingsManager.CalculatorMode;
@@ -58,6 +60,31 @@ namespace Tema1Calculator
                 {
                     UpdateDisplay(_calculatorEngine.CurrentValue);
                 }
+            }
+        }
+        public bool DigitGroupingEnabled
+        {
+            get => _digitGroupingEnabled;
+            set
+            {
+                _digitGroupingEnabled = value;
+                OnPropertyChanged();
+                SettingsManager.DigitGroupingEnabled = value;
+                UpdateDisplay(_calculatorEngine.CurrentValue);
+            }
+        }
+
+        public bool UsePrecedenceEnabled
+        {
+            get => _usePrecedenceEnabled;
+            set
+            {
+                _usePrecedenceEnabled = value;
+                OnPropertyChanged();
+                // SettingsManager.UsePrecedenceEnabled = value;
+                _calculatorEngine.UsePrecedence = value;
+
+                Clear();
             }
         }
 
@@ -104,18 +131,6 @@ namespace Tema1Calculator
                 OnPropertyChanged();
             }
         }
-        public bool DigitGroupingEnabled
-        {
-            get => _digitGroupingEnabled;
-            set
-            {
-                _digitGroupingEnabled = value;
-                OnPropertyChanged();
-                SettingsManager.DigitGroupingEnabled = value;
-                UpdateDisplay(_calculatorEngine.CurrentValue);
-            }
-        }
-        
 
         public string DisplayText
         {
@@ -137,7 +152,6 @@ namespace Tema1Calculator
             }
         }
 
-
         public void EnterDigit(string digit)
         {
             try
@@ -152,11 +166,11 @@ namespace Tema1Calculator
             }
             catch (OverflowException)
             {
-                MessageBox.Show("Overflow", "Error", MessageBoxButton.OK, MessageBoxImage.Warning);
+                ShowErrorMessage("Overflow");
             }
             catch (ArgumentException)
             {
-                MessageBox.Show("Invalid Input", "Error", MessageBoxButton.OK, MessageBoxImage.Warning);
+                ShowErrorMessage("Invalid Input");
             }
         }
 
@@ -164,62 +178,65 @@ namespace Tema1Calculator
         {
             try
             {
-                // Convert the digit to decimal based on the current base
-                int digitValue;
+                if (!IsValidDigitForCurrentBase(digit))
+                    return;
 
-                if (digit.Length == 1 && "ABCDEF".Contains(digit.ToUpper()))
-                {
-                    if (ProgrammerBase < 16)
-                        return; // Ignore hex digits in non-hex modes
-
-                    digitValue = "ABCDEF".IndexOf(digit.ToUpper()) + 10;
-                }
-                else
-                {
-                    if (!int.TryParse(digit, out digitValue))
-                        return;
-
-                    // Check if the digit is valid for the current base
-                    if (digitValue >= ProgrammerBase)
-                        return;
-                }
-
-                // Calculate the actual value based on current base
-                double currentValue = _calculatorEngine.CurrentValue;
-
-                // All calculations internally use base 10
+                int digitValue = GetDigitValue(digit);
                 _calculatorEngine.ValidateAndEnterDigit(digitValue.ToString());
 
-                // Update display in the selected base
                 UpdateDisplayForProgrammerMode(_calculatorEngine.CurrentValue);
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Warning);
+                ShowErrorMessage(ex.Message);
             }
+        }
+
+        private bool IsValidDigitForCurrentBase(string digit)
+        {
+            if (digit.Length == 1 && "ABCDEF".Contains(digit.ToUpper()))
+            {
+                return ProgrammerBase >= 16; 
+            }
+
+            if (!int.TryParse(digit, out int digitValue))
+            {
+                return false;
+            }
+
+            return digitValue < ProgrammerBase;
+        }
+
+        private int GetDigitValue(string digit)
+        {
+            if (digit.Length == 1 && "ABCDEF".Contains(digit.ToUpper()))
+            {
+                return "ABCDEF".IndexOf(digit.ToUpper()) + 10;
+            }
+
+            return int.Parse(digit);
         }
 
         public void SetOperation(string operation)
         {
             try
             {
-                string result = _calculatorEngine.SetOperation(operation).ToString();
+                double value = _calculatorEngine.SetOperation(operation);
+
                 if (CalculatorMode == "Programmer")
                 {
-                    // Update all displays for programmer mode
                     UpdateDisplayForProgrammerMode(_calculatorEngine.CurrentValue);
 
-                    // Update operation history
                     OperationHistory += $"{_calculatorEngine.FormatNumberInBase(_calculatorEngine.CurrentValue, _programmerBase)} {operation} ";
                 }
                 else
                 {
-                    UpdateDisplayWithHistory(result, operation);
+                    UpdateDisplayWithHistory(value.ToString(), operation);
                 }
             }
             catch (ArgumentException)
             {
-                MessageBox.Show("Invalid Operation", "Error", MessageBoxButton.OK, MessageBoxImage.Warning);
+                ShowErrorMessage("Invalid Operation");
             }
         }
 
@@ -231,7 +248,6 @@ namespace Tema1Calculator
 
                 if (CalculatorMode == "Programmer")
                 {
-                    // Update all displays for programmer mode
                     UpdateDisplayForProgrammerMode(result);
                     OperationHistory = "";
                 }
@@ -242,11 +258,11 @@ namespace Tema1Calculator
             }
             catch (DivideByZeroException)
             {
-                MessageBox.Show("Divide by Zero", "Error", MessageBoxButton.OK, MessageBoxImage.Warning);
+                ShowErrorMessage("Divide by Zero");
             }
             catch (Exception)
             {
-                MessageBox.Show("Error", "Error", MessageBoxButton.OK, MessageBoxImage.Warning);
+                ShowErrorMessage("Error");
             }
         }
 
@@ -262,19 +278,15 @@ namespace Tema1Calculator
             }
         }
 
-
         private void UpdateDisplayForProgrammerMode(double value)
         {
-            // Ensure we're working with integer values for base conversion
             long intValue = (long)value;
 
-            // Update values in different bases
             HexValue = Convert.ToString(intValue, 16).ToUpper();
             DecValue = intValue.ToString();
             OctValue = Convert.ToString(intValue, 8);
             BinValue = Convert.ToString(intValue, 2);
 
-            // Update the main display based on selected base
             DisplayText = _calculatorEngine.FormatNumberInBase(value, ProgrammerBase);
         }
 
@@ -299,18 +311,36 @@ namespace Tema1Calculator
             OperationHistory = "";
         }
 
-        // Funcții pentru operații speciale
-
-        public void Backspace()
+        // Helper method for executing operations and handling errors uniformly
+        private void ExecuteOperation(Func<double> operation, string errorMessage = "Error")
         {
             try
             {
-                UpdateDisplay(_calculatorEngine.Backspace());
+                UpdateDisplay(operation());
+            }
+            catch (DivideByZeroException)
+            {
+                ShowErrorMessage("Divide by Zero");
+            }
+            catch (ArithmeticException)
+            {
+                ShowErrorMessage("Invalid Input");
             }
             catch (Exception)
             {
-                MessageBox.Show("Error", "Error", MessageBoxButton.OK, MessageBoxImage.Warning);
+                ShowErrorMessage(errorMessage);
             }
+        }
+
+        private void ShowErrorMessage(string message)
+        {
+            MessageBox.Show(message, "Error", MessageBoxButton.OK, MessageBoxImage.Warning);
+        }
+
+        // Funcții pentru operații speciale
+        public void Backspace()
+        {
+            ExecuteOperation(() => _calculatorEngine.Backspace());
         }
 
         public void ClearEntry()
@@ -320,66 +350,30 @@ namespace Tema1Calculator
 
         public void ChangeSign()
         {
-            try
-            {
-                UpdateDisplay(_calculatorEngine.ChangeSign());
-            }
-            catch (Exception)
-            {
-                MessageBox.Show("Error", "Error", MessageBoxButton.OK, MessageBoxImage.Warning);
-            }
+            ExecuteOperation(() => _calculatorEngine.ChangeSign());
         }
 
         public void Reciprocal()
         {
-            try
-            {
-                UpdateDisplay(_calculatorEngine.Reciprocal());
-            }
-            catch (DivideByZeroException)
-            {
-                MessageBox.Show("Divide by Zero", "Error", MessageBoxButton.OK, MessageBoxImage.Warning);
-            }
+            ExecuteOperation(() => _calculatorEngine.Reciprocal(), "Divide by Zero");
         }
 
         public void Square()
         {
-            try
-            {
-                UpdateDisplay(_calculatorEngine.Square());
-            }
-            catch (Exception)
-            {
-                MessageBox.Show("Error", "Error", MessageBoxButton.OK, MessageBoxImage.Warning);
-            }
+            ExecuteOperation(() => _calculatorEngine.Square());
         }
 
         public void SquareRoot()
         {
-            try
-            {
-                UpdateDisplay(_calculatorEngine.SquareRoot());
-            }
-            catch (ArithmeticException)
-            {
-                MessageBox.Show("Invalid Input", "Error", MessageBoxButton.OK, MessageBoxImage.Warning);
-            }
+            ExecuteOperation(() => _calculatorEngine.SquareRoot(), "Invalid Input");
         }
 
         public void Percentage()
         {
-            try
-            {
-                UpdateDisplay(_calculatorEngine.Percentage());
-            }
-            catch (Exception)
-            {
-                MessageBox.Show("Error", "Error", MessageBoxButton.OK, MessageBoxImage.Warning);
-            }
+            ExecuteOperation(() => _calculatorEngine.Percentage());
         }
 
         // Funcții de memorie
-
         public List<double> GetMemoryList()
         {
             return _calculatorEngine.GetMemoryList();
@@ -407,5 +401,4 @@ namespace Tema1Calculator
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
-
 }

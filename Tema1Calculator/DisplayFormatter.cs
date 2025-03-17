@@ -43,5 +43,27 @@ namespace Tema1Calculator
             return valueStr;
         }
 
+        public string FormatNumberInBase(double value, int numberBase, bool _digitGroupingEnabled)
+        {
+            if (value != Math.Floor(value) || value < 0)
+            {
+                return value.ToString();
+            }
+
+            long longValue = (long)value;
+            switch (numberBase)
+            {
+                case 2:
+                    return Convert.ToString(longValue, 2);
+                case 8:
+                    return Convert.ToString(longValue, 8);
+                case 10:
+                    return FormatNumber(value, _digitGroupingEnabled);
+                case 16:
+                    return Convert.ToString(longValue, 16).ToUpper();
+                default:
+                    return value.ToString();
+            }
+        }
     }
 }

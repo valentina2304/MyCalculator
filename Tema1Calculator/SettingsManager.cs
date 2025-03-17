@@ -9,7 +9,6 @@ namespace Tema1Calculator
 {
     class SettingsManager
     {
-        // Get or set digit grouping enabled state
         public static bool DigitGroupingEnabled
         {
             get { return Properties.Settings.Default.DigitGrouping; }
@@ -20,7 +19,6 @@ namespace Tema1Calculator
             }
         }
 
-        // Get or set calculator mode
         public static string CalculatorMode
         {
             get { return Properties.Settings.Default.CalculatorMode; }
@@ -31,7 +29,6 @@ namespace Tema1Calculator
             }
         }
 
-        // Get or set programmer mode base
         public static int ProgrammerBase
         {
             get { return Properties.Settings.Default.ProgrammerBase; }

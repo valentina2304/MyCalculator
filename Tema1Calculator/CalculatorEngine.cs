@@ -14,7 +14,9 @@ namespace Tema1Calculator
         private MemoryManager _memoryManager;
         private AdvancedOperations _advancedOps;
         private DisplayFormatter _formatter;
-        private bool _digitGroupingEnabeld;
+        private ExpressionEvaluator _expressionEvaluator;
+        private bool _digitGroupingEnabled;
+        private bool _usePrecedence;
 
         public CalculatorEngine()
         {
@@ -22,14 +24,23 @@ namespace Tema1Calculator
             _memoryManager = new MemoryManager();
             _advancedOps = new AdvancedOperations();
             _formatter = new DisplayFormatter();
+            _expressionEvaluator = new ExpressionEvaluator();
+            _usePrecedence = false;
+            _digitGroupingEnabled = false;
         }
 
         public double CurrentValue => _processor.CurrentValue;
         public string CurrentOperation => _processor.CurrentOperation;
+        public bool UsePrecedence
+        {
+            get => _usePrecedence;
+            set => _usePrecedence = value;
+        }
 
         public void Reset()
         {
             _processor.Reset();
+            _expressionEvaluator.Reset();
         }
 
         public void ValidateAndEnterDigit(string digit)
@@ -39,12 +50,41 @@ namespace Tema1Calculator
 
         public double SetOperation(string operation)
         {
-            return _processor.SetOperation(operation);
+            if (!_usePrecedence)
+            {
+                return _processor.SetOperation(operation);
+            }
+
+            _expressionEvaluator.AddValue(_processor.CurrentValue);
+
+            _expressionEvaluator.AddOperation(operation);
+
+            double currentValue = _processor.CurrentValue;
+            _processor.Reset();
+
+            return currentValue;
         }
 
         public double Calculate()
         {
-            return _processor.Calculate();
+            if (!_usePrecedence)
+            {
+                return _processor.Calculate();
+            }
+
+            _expressionEvaluator.AddValue(_processor.CurrentValue);
+
+            double result = _expressionEvaluator.Evaluate();
+
+            _expressionEvaluator.Reset();
+            _processor.SetValue(result);
+
+            return result;
+        }
+
+        public string GetExpressionString()
+        {
+            return _expressionEvaluator.GetExpressionString();
         }
 
         public double Backspace()
@@ -95,7 +135,6 @@ namespace Tema1Calculator
 
         public double Percentage()
         {
-
             double result = _advancedOps.Percentage(CurrentValue, _processor.StoredValue, CurrentOperation);
             _processor.SetValue(result);
             return result;
@@ -109,28 +148,8 @@ namespace Tema1Calculator
 
         public string FormatNumberInBase(double value, int numberBase)
         {
-            if (value != Math.Floor(value) || value < 0)
-            {
-                // Non-integers or negative numbers can only be displayed in base 10
-                return value.ToString();
-            }
-
-            long longValue = (long)value;
-            switch (numberBase)
-            {
-                case 2:
-                    return Convert.ToString(longValue, 2);
-                case 8:
-                    return Convert.ToString(longValue, 8);
-                case 10:
-                    return FormatNumber(value, _digitGroupingEnabeld);
-                case 16:
-                    return Convert.ToString(longValue, 16).ToUpper();
-                default:
-                    return value.ToString();
-            }
+            return _formatter.FormatNumberInBase(value, numberBase, _digitGroupingEnabled);
         }
-
 
         // Funcții pentru memoria calculatorului
         public void MemoryStore()
@@ -169,7 +188,5 @@ namespace Tema1Calculator
         {
             _processor.SetValue(value);
         }
-
-
     }
 }

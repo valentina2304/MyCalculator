@@ -34,16 +34,22 @@ namespace Tema1Calculator
 
         }
 
-        private void AboutMenuItem_Click(object sender, RoutedEventArgs e)
+
+        private void AttachProgrammerButtonHandlers()
         {
-            MessageBox.Show("Created by Lixandru Valentina-Mariana 10LF332", "About", MessageBoxButton.OK, MessageBoxImage.Information);
-        }
-        private void DigitGrouping_Click(object sender, RoutedEventArgs e)
-        {
-            MenuItem menuItem = sender as MenuItem;
-            if (menuItem != null)
+            foreach (UIElement element in (FindName("ProgrammerGrid") as Grid).Children)
             {
-                _viewModel.DigitGroupingEnabled = menuItem.IsChecked;
+                if (element is Grid grid)
+                {
+                    foreach (UIElement gridElement in grid.Children)
+                    {
+                        if (gridElement is Button button)
+                        {
+                            string content = button.Content.ToString();
+                            button.Click += (s, e) => HandleProgrammerButtonClick(content);
+                        }
+                    }
+                }
             }
         }
 
@@ -97,7 +103,43 @@ namespace Tema1Calculator
                 case "%":
                     _viewModel.Percentage();
                     break;
-                
+
+            }
+        }
+
+        private void HandleProgrammerButtonClick(string content)
+        {
+            if ((content.Length == 1 && "0123456789ABCDEF".Contains(content)))
+            {
+                _viewModel.EnterDigitProgrammer(content);
+            }
+            else if (content == "+" || content == "-" || content == "*" || content == "/" ||
+                    content == "=" || content == "C" || content == "CE" || content == "⌫" || content == "%")
+            {
+                switch (content)
+                {
+                    case "+":
+                    case "-":
+                    case "*":
+                    case "/":
+                        _viewModel.SetOperation(content);
+                        break;
+                    case "=":
+                        _viewModel.Calculate();
+                        break;
+                    case "C ":
+                        _viewModel.Clear();
+                        break;
+                    case "CE":
+                        _viewModel.ClearEntry();
+                        break;
+                    case "⌫":
+                        _viewModel.Backspace();
+                        break;
+                    case "%":
+                        _viewModel.Percentage();
+                        break;
+                }
             }
         }
 
@@ -151,10 +193,11 @@ namespace Tema1Calculator
 
             e.Handled = true;
         }
-    
 
 
-    private void CutMenuItem_Click(object sender, RoutedEventArgs e)
+        // CLIPBOARD
+
+        private void CutMenuItem_Click(object sender, RoutedEventArgs e)
         {
             string text = _viewModel.DisplayText.ToString();
             Clipboard.SetText(text);
@@ -191,6 +234,8 @@ namespace Tema1Calculator
             }
         }
 
+
+        // MEMORY
         private void MemoryList_Click(object sender, RoutedEventArgs e)
         {
             var memoryValues = _viewModel.GetMemoryList();
@@ -248,6 +293,8 @@ namespace Tema1Calculator
         }
 
 
+        // MODE SWITCHING
+
         private void ModeMenuItem_Click(object sender, RoutedEventArgs e)
         {
             MenuItem menuItem = sender as MenuItem;
@@ -266,8 +313,7 @@ namespace Tema1Calculator
             }
         }
 
-
-
+        // BASE SWITCHING
         private void BaseRadioButton_Click(object sender, RoutedEventArgs e)
         {
             RadioButton radioButton = sender as RadioButton;
@@ -278,61 +324,29 @@ namespace Tema1Calculator
             }
         }
 
-        private void AttachProgrammerButtonHandlers()
+
+        // OPTIONS
+        private void DigitGrouping_Click(object sender, RoutedEventArgs e)
         {
-            foreach (UIElement element in (FindName("ProgrammerGrid") as Grid).Children)
+            MenuItem menuItem = sender as MenuItem;
+            if (menuItem != null)
             {
-                if (element is Grid grid)
-                {
-                    foreach (UIElement gridElement in grid.Children)
-                    {
-                        if (gridElement is Button button)
-                        {
-                            string content = button.Content.ToString();
-                            button.Click += (s, e) => HandleProgrammerButtonClick(content);
-                        }
-                    }
-                }
+                _viewModel.DigitGroupingEnabled = menuItem.IsChecked;
+            }
+        }
+        private void ExpressionEvaluator_Click(object sender, RoutedEventArgs e)
+        {
+            MenuItem menuItem = sender as MenuItem;
+            if (menuItem != null)
+            {
+                _viewModel.UsePrecedenceEnabled = menuItem.IsChecked;
             }
         }
 
-        private void HandleProgrammerButtonClick(string content)
+        // ABOUT
+        private void AboutMenuItem_Click(object sender, RoutedEventArgs e)
         {
-            // Verify if content is a hexadecimal digit or an operation
-            if ((content.Length == 1 && "0123456789ABCDEF".Contains(content)))
-            {
-                // Use EnterDigitProgrammer for programmer mode
-                _viewModel.EnterDigitProgrammer(content);
-            }
-            else if (content == "+" || content == "-" || content == "*" || content == "/" ||
-                    content == "=" || content == "C" || content == "CE" || content == "⌫" || content == "%")
-            {
-                // Handle operations
-                switch (content)
-                {
-                    case "+":
-                    case "-":
-                    case "*":
-                    case "/":
-                        _viewModel.SetOperation(content);
-                        break;
-                    case "=":
-                        _viewModel.Calculate();
-                        break;
-                    case "C ":
-                        _viewModel.Clear();
-                        break;
-                    case "CE":
-                        _viewModel.ClearEntry();
-                        break;
-                    case "⌫":
-                        _viewModel.Backspace();
-                        break;
-                    case "%":
-                        _viewModel.Percentage();
-                        break;
-                }
-            }
+            MessageBox.Show("Created by Lixandru Valentina-Mariana 10LF332", "About", MessageBoxButton.OK, MessageBoxImage.Information);
         }
     }
 }

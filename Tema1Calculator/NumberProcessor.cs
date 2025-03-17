@@ -47,7 +47,6 @@ namespace Tema1Calculator
                 _hasDecimalPoint = false;
             }
 
-            // Handle decimal point
             if (digit == decimalSeparator)
             {
                 if (_hasDecimalPoint)
@@ -59,14 +58,13 @@ namespace Tema1Calculator
 
             int digitValue;
 
-            // Convert hex digits to their decimal value
             if (digit.Length == 1 && "ABCDEF".Contains(digit.ToUpper()))
             {
                 digitValue = "ABCDEF".IndexOf(digit.ToUpper()) + 10;
             }
             else
             {
-                // Regular digit
+                
                 if (!int.TryParse(digit, out digitValue))
                     return;
             }

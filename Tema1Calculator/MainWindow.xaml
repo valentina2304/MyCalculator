@@ -42,6 +42,10 @@
                    IsCheckable="True" 
                    IsChecked="{Binding DigitGroupingEnabled, Mode=TwoWay}" 
                   Click="DigitGrouping_Click"/>
+                <MenuItem Header="Expression Evaluator" IsCheckable="True" 
+                          IsChecked="{Binding UsePrecedenceEnabled,Mode=TwoWay}"
+                          Click="ExpressionEvaluator_Click">
+                </MenuItem>
 
             </MenuItem>
             <MenuItem Header="Mode">
