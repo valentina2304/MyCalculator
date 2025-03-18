@@ -161,7 +161,49 @@ namespace Tema1Calculator
                 return;
             }
 
-            switch (e.Key)
+           if(e.Key== Key.A)
+            {
+                _viewModel.EnterDigit("A");
+                e.Handled = true;
+                return;
+            }
+
+            if (e.Key == Key.B)
+            {
+                _viewModel.EnterDigit("B");
+                e.Handled = true;
+                return;
+            }
+
+            if (e.Key == Key.C)
+            {
+                _viewModel.EnterDigit("C");
+                e.Handled = true;
+                return;
+            }
+
+            if (e.Key == Key.D)
+            {
+                _viewModel.EnterDigit("D");
+                e.Handled = true;
+                return;
+            }
+
+            if (e.Key == Key.E)
+            {
+                _viewModel.EnterDigit("E");
+                e.Handled = true;
+                return;
+            }
+
+            if (e.Key == Key.F)
+            {
+                _viewModel.EnterDigit("F");
+                e.Handled = true;
+                return;
+            }
+
+                switch (e.Key)
             {
                 case Key.Decimal:
                 case Key.OemPeriod:
