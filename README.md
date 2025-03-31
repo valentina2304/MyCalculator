@@ -39,6 +39,14 @@ WPF (Windows Presentation Foundation): For building the graphical user interface
 
 Visual Studio: Recommended IDE for development.
 
+
+Future Enhancements
+Add scientific calculator features such as trigonometric functions.
+
+Allow user customization of themes and layouts.
+
+Optimize the application for performance on various devices.
+
 Installation & Setup
 Clone the repository:
 
